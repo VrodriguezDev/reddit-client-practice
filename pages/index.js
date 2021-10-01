@@ -1,31 +1,5 @@
 import Head from 'next/head';
-
-const FULL_HEIGHT = '100vh';
-const containerStyle = {
-  minHeight: FULL_HEIGHT,
-  padding: '0 0.5rem',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  height: FULL_HEIGHT
-}
-
-const mainStyle = {
-  flex: 1,
-  padding: '5rem 0',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center'
-}
-const footerStyle = {
-  width: '100%',
-  height: '40px',
-  borderTop: '1px solid #eaeaea',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center'
-}
+import { containerStyle, mainStyle, footerStyle } from '../styles/semanticStyles'
 
 export default function Home() {
   return (
