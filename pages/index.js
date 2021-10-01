@@ -1,5 +1,7 @@
 import Head from 'next/head';
-import { containerStyle, mainStyle, footerStyle } from '../styles/semanticStyles'
+import { containerStyle, mainStyle, footerStyle } from '../styles/semanticStyles';
+import { Header } from 'semantic-ui-react';
+import ClientMainContent from '../components/ClientMainContent';
 
 export default function Home() {
   return (
@@ -10,7 +12,7 @@ export default function Home() {
       </Head>
 
       <main style={mainStyle}>
-        Reddit Client Practice
+        <ClientMainContent />
       </main>
 
       <footer style={footerStyle}>
