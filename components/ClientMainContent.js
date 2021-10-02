@@ -3,15 +3,13 @@ import {
   Container,
   Header,
   Sidebar,
-  Grid,
   Checkbox,
-  Menu,
   Segment,
-  Image,
   List
 } from 'semantic-ui-react';
 import PostListItem from './PostListItem';
 const EX_DATA_FILE = "../exampledata/top.json";
+const DATA_URL = "https://www.reddit.com/top.json?limit=50";
 
 const generatePostsList = (posts) => (
   posts.map(post => <PostListItem key={post.data.id} postData={post.data} />)
@@ -27,26 +25,29 @@ const PostsList = () => {
         'Accept': 'application/json'
        }
     }
-    ).then(function(response){
-        console.log(response);
-        return response.json();
-    }).then(function(readData) {
-        console.log(readData);
-        setData(readData);
-      });
+    ).then(res => {
+      console.log("Response");
+      console.log(res);
+      return res.json();
+    }).then(jsonData => {
+      console.log("Json Data");
+      console.log(jsonData);
+      setData(jsonData.data);
+    });
   }
-  useEffect(()=>{   
+  useEffect(() => {
       getData();
+      console.log("Loaded data:")
+      console.log(data);
   }, []);
-  console.log(data);
 
   if(!data) {
     return <span>Loading...</span>
   } else {
-    if(data.data.children && data.data.children.length > 0) {
+    if(data.children && data.children.length > 0) {
       return (
-        <List divided animated selection size='large'>
-          {generatePostsList(data.data.children)}
+        <List inverted divided animated selection size='large'>
+          {generatePostsList(data.children)}
         </List>
       );
     } else {
@@ -77,7 +78,7 @@ export default function ClientMainContent() {
             visible={visible}
             width='wide'
           >
-            <Header as='h3' fluid inverted style={{ paddingTop: '2em' }}>TOP POSTS</Header>
+            <Header as='h3' fluid inverted textAlign='center' style={{ paddingTop: '2em' }}>TOP POSTS</Header>
             <PostsList />
           </Sidebar>
           <Sidebar.Pusher>
