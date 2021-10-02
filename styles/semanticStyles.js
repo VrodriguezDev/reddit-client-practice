@@ -12,7 +12,6 @@ export const containerStyle = {
 export const mainStyle = {
   flex: 1,
   width: '100%',
-  paddingBottom: '2em',
   flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center'

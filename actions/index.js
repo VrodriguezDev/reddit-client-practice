@@ -17,3 +17,17 @@ export const changeSidebarOpen = () => (
     type: 'CHANGE'
   }
 );
+
+export const dismissPost = postId => (
+  {
+    type: 'DISMISS_POST',
+    payload: postId
+  }
+);
+
+export const updateRead = post => (
+  {
+    type: 'UPDATE_READ',
+    payload: post
+  }
+);

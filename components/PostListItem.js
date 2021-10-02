@@ -10,6 +10,8 @@ import
   Button,
   Icon
 } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
+import { dismissPost, updateSelected } from '../actions';
 
 function formatDMY(d) {
   return ('0' + d.getDate()).slice(-2) + '/' +
@@ -51,23 +53,31 @@ const calculatePostedXAgo = (created) => {
   return xAgo + " " + unit + " ago";
 };
 
-export default function PostListItem({ postData, selected, updateFunc }) {
+export default function PostListItem({ postData, selected, read, updateFunc }) {
+
+  const dispatch = useDispatch();
+  const dismissPostFunc = (id) => {
+    dispatch(dismissPost(id));
+    if(selected) {
+      dispatch(updateSelected(null));
+    }
+  };
   return (
-    <List.Item onClick={() => updateFunc(postData.id)}>
+    <List.Item>
       <Segment basic clearing color={selected ? 'red' : ''}>
         <Header color='orange' floated='left' size='medium'>{postData.author}</Header>
         <Header color='grey' floated='right' size='small'>{calculatePostedXAgo(postData.created)}</Header>
       </Segment>
       <Container>
       <Grid columns={2}>
-        <Grid.Row>
+        <Grid.Row onClick={() => updateFunc(postData.id)}>
           <Grid.Column width={postData.thumbnail ? 6 : 0}>
             <Image src={postData.thumbnail} />
           </Grid.Column>
           <Grid.Column width={postData.thumbnail ? 8 : 14}>
             <List.Content>
               <a color='white'>{postData.subreddit_name_prefixed}</a>
-              <Header color='grey'>
+              <Header color={read ? 'purple' : 'grey'}>
                 {postData.title}
               </Header>
             </List.Content>
@@ -75,7 +85,7 @@ export default function PostListItem({ postData, selected, updateFunc }) {
         </Grid.Row>
         <Grid.Row>
           <Segment basic inverted clearing>
-            <Button animated='fade' color='grey' floated='left'>
+            <Button animated='fade' color='grey' floated='left' onClick={() => dismissPostFunc(postData.id)}>
               <Button.Content visible>
                 <Icon name='cancel' style={{ paddingRight: '3em', paddingLeft: '3em' }}/>
               </Button.Content>

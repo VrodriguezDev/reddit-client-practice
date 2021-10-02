@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import {
   Container,
   Header,
@@ -8,10 +9,10 @@ import {
   Segment
 } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { changeSidebarOpen } from '../actions'
+import { changeSidebarOpen } from '../actions';
 
 const PostContent = ({ post }) => {
-  const { data } = post;
+  let { data } = post;
   const dispatch = useDispatch();
   const sidebarOpen = useSelector(state => state.sidebar);
 

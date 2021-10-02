@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { 
   Container,
   Header,
   Sidebar,
-  Checkbox,
   Segment
 } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
@@ -26,12 +24,16 @@ export default function ClientMainContent() {
             visible={sidebarOpen}
             width='very wide'
           >
-            <Header as='h3' fluid inverted textAlign='center' style={{ paddingTop: '2em' }}>TOP POSTS</Header>
+            <Header as='h3' fluid inverted textAlign='center' style={{ paddingTop: '2em' }}>
+              TOP POSTS
+            </Header>
             <PostsList />
           </Sidebar>
           <Sidebar.Pusher>
             <Segment basic>
-              {selectedPost != null && <PostContent post={selectedPost}/>}
+              {selectedPost !== null ?
+                <PostContent post={selectedPost}/> :
+                <span style={{ fontSize: '16px', marginTop: '12em' }}>No post selected</span>}
             </Segment>
           </Sidebar.Pusher>
         </Sidebar.Pushable>
