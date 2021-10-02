@@ -9,16 +9,23 @@ import {
 } from 'semantic-ui-react';
 import PostListItem from './PostListItem';
 import useFetchWithSWR from '../fetcher';
-const EX_DATA_FILE = "../exampledata/top.json";
 const DATA_URL = "https://www.reddit.com/top.json?limit=50";
 
-const generatePostsList = (posts) => (
-  posts.map(post => <PostListItem key={post.data.id} postData={post.data} />)
+const generatePostsList = (posts, selectedPost, updateSelectedPost) => (
+  posts.map(post => <PostListItem
+                      selected={selectedPost && selectedPost.data.id === post.data.id}
+                      key={post.data.id}
+                      postData={post.data}
+                      updateFunc={updateSelectedPost}/>)
 );
 
 const PostsList = () => {
-  const [data, setData] = useState();
+  const [posts, setPosts] = useState();
+  const [selectedPost, setSelectedPost] = useState();
   const [fetchedData, error] = useFetchWithSWR(DATA_URL);
+  const updateSelectedPost = (key) => {
+    setSelectedPost(posts.find(p => p.data.id === key));
+  };
   const getData = () => {
     if(error) {
       console.log("Something went wrong");
@@ -28,22 +35,22 @@ const PostsList = () => {
     if(fetchedData) {
       console.log("Data fetched successfully");
       console.log(fetchedData);
-      setData(fetchedData);
+      setPosts(fetchedData.data.children);
     }
   }
   useEffect(() => {
     getData();
     console.log("Loaded data:")
-    console.log(data);
+    console.log(posts);
   });
 
-  if(!data) {
+  if(!posts) {
     return <span>Loading...</span>
   } else {
-    if(data.data.children && data.data.children.length > 0) {
+    if(posts && posts.length > 0) {
       return (
         <List inverted divided animated selection size='large'>
-          {generatePostsList(data.data.children)}
+          {generatePostsList(posts, selectedPost, updateSelectedPost)}
         </List>
       );
     } else {

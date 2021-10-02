@@ -51,10 +51,10 @@ const calculatePostedXAgo = (created) => {
   return xAgo + " " + unit + " ago";
 };
 
-export default function PostListItem({ postData }) {
+export default function PostListItem({ postData, selected, updateFunc }) {
   return (
-    <List.Item>
-      <Segment basic clearing>
+    <List.Item onClick={() => updateFunc(postData.id)}>
+      <Segment basic clearing color={selected ? 'red' : ''}>
         <Header color='orange' floated='left' size='medium'>{postData.author}</Header>
         <Header color='grey' floated='right' size='small'>{calculatePostedXAgo(postData.created)}</Header>
       </Segment>
@@ -66,6 +66,7 @@ export default function PostListItem({ postData }) {
           </Grid.Column>
           <Grid.Column width={postData.thumbnail ? 8 : 14}>
             <List.Content>
+              <a color='white'>{postData.subreddit_name_prefixed}</a>
               <Header color='grey'>
                 {postData.title}
               </Header>
