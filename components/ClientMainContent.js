@@ -8,6 +8,7 @@ import {
   List
 } from 'semantic-ui-react';
 import PostListItem from './PostListItem';
+import useFetchWithSWR from '../fetcher';
 const EX_DATA_FILE = "../exampledata/top.json";
 const DATA_URL = "https://www.reddit.com/top.json?limit=50";
 
@@ -17,37 +18,32 @@ const generatePostsList = (posts) => (
 
 const PostsList = () => {
   const [data, setData] = useState();
+  const [fetchedData, error] = useFetchWithSWR(DATA_URL);
   const getData = () => {
-    fetch(EX_DATA_FILE,
-    {
-      headers : { 
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-       }
+    if(error) {
+      console.log("Something went wrong");
+      console.log(error);
+      return;
     }
-    ).then(res => {
-      console.log("Response");
-      console.log(res);
-      return res.json();
-    }).then(jsonData => {
-      console.log("Json Data");
-      console.log(jsonData);
-      setData(jsonData.data);
-    });
+    if(fetchedData) {
+      console.log("Data fetched successfully");
+      console.log(fetchedData);
+      setData(fetchedData);
+    }
   }
   useEffect(() => {
-      getData();
-      console.log("Loaded data:")
-      console.log(data);
-  }, []);
+    getData();
+    console.log("Loaded data:")
+    console.log(data);
+  });
 
   if(!data) {
     return <span>Loading...</span>
   } else {
-    if(data.children && data.children.length > 0) {
+    if(data.data.children && data.data.children.length > 0) {
       return (
         <List inverted divided animated selection size='large'>
-          {generatePostsList(data.children)}
+          {generatePostsList(data.data.children)}
         </List>
       );
     } else {
