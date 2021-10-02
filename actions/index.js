@@ -11,3 +11,9 @@ export const updateSelected = post => (
     payload: post
   }
 );
+
+export const changeSidebarOpen = () => (
+  {
+    type: 'CHANGE'
+  }
+);

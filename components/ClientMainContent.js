@@ -6,31 +6,24 @@ import {
   Checkbox,
   Segment
 } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import PostsList from './PostsList';
 import PostContent from './PostContent';
 
 export default function ClientMainContent() {
-  const [visible, setVisible] = useState(true);
+  const sidebarOpen = useSelector(state => state.sidebar);
   const selectedPost = useSelector(state => state.selectedPost);
 
   return (
     <Container basic fluid style={{ height: '100%' }}>
-        {/* Using a checkbox for now, will add real functionality later */}
-        <Checkbox
-          checked={visible}
-          label={{ children: <code>visible</code> }}
-          onChange={(e, data) => setVisible(data.checked)}
-        />
         <Sidebar.Pushable as={Segment}>
           <Sidebar
             as={Segment}
             animation='slide along'
             icon='labeled'
             inverted
-            onHide={() => setVisible(false)}
             vertical
-            visible={visible}
+            visible={sidebarOpen}
             width='very wide'
           >
             <Header as='h3' fluid inverted textAlign='center' style={{ paddingTop: '2em' }}>TOP POSTS</Header>
