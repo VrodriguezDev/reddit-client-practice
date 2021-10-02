@@ -9,22 +9,26 @@ import {
 } from 'semantic-ui-react';
 import PostListItem from './PostListItem';
 import useFetchWithSWR from '../fetcher';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadPosts, updateSelected } from '../actions';
+
 const DATA_URL = "https://www.reddit.com/top.json?limit=50";
 
 const generatePostsList = (posts, selectedPost, updateSelectedPost) => (
   posts.map(post => <PostListItem
-                      selected={selectedPost && selectedPost.data.id === post.data.id}
+                      selected={selectedPost && selectedPost !== null && selectedPost.data.id === post.data.id}
                       key={post.data.id}
                       postData={post.data}
                       updateFunc={updateSelectedPost}/>)
 );
 
 const PostsList = () => {
-  const [posts, setPosts] = useState();
-  const [selectedPost, setSelectedPost] = useState();
+  const dispatch = useDispatch();
+  const posts = useSelector(state => state.posts);
+  const selectedPost = useSelector(state => state.selectedPost);
   const [fetchedData, error] = useFetchWithSWR(DATA_URL);
   const updateSelectedPost = (key) => {
-    setSelectedPost(posts.find(p => p.data.id === key));
+    dispatch(updateSelected(posts.find(p => p.data.id === key)));
   };
   const getData = () => {
     if(error) {
@@ -35,7 +39,7 @@ const PostsList = () => {
     if(fetchedData) {
       console.log("Data fetched successfully");
       console.log(fetchedData);
-      setPosts(fetchedData.data.children);
+      dispatch(loadPosts(fetchedData.data.children));
     }
   }
   useEffect(() => {
